@@ -1,4 +1,17 @@
-<h1 align="center"> ExpandableText 😎 </p>
+<h1 align="center"> ExpandableText 😎 (SwiftUI)</p>
+<p align="center">
+    <a href="https://github.com/NuPlay/ExpandableText/releases/latest">
+        <img src="https://img.shields.io/github/v/release/NuPlay/ExpandableText?label=version&labelColor=303840" alt="version">
+    </a>
+    <a href="https://swift.org/">
+        <img src="https://img.shields.io/badge/Swift-5.1+-F05138?labelColor=303840" alt="Swift: 5.1+">
+    </a>
+    <a href="https://www.apple.com/ios/">
+        <img src="https://img.shields.io/badge/iOS-13.0+-007AFF?labelColor=303840" alt="iOS: 13.0+">
+    </a>
+    <a href="/LICENSE">
+        <img src="https://img.shields.io/github/license/NuPlay/ExpandableText?color=blue&labelColor=303840" alt="license">        
+</p>
 <h3 align="center"> Expand the text with the "more" button </h3>
 <h3 align="center"> <img src="https://user-images.githubusercontent.com/73557895/136821265-80941d7f-0942-49dc-907f-e31f1548d23e.gif" alt="example"/> </h3>
 
