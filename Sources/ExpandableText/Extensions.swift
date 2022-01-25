@@ -10,7 +10,6 @@ import SwiftUI
 extension ExpandableText {
     public func font(_ font: Font) -> ExpandableText {
         var result = self
-        
         if #available(iOS 14.0, *) {
             switch font {
             case .largeTitle:
@@ -66,8 +65,9 @@ extension ExpandableText {
                 result.uiFont = UIFont.preferredFont(forTextStyle: .body)
             }
         }
-        result.font = font
         
+        result.font = font
+
         return result
     }
     public func lineLimit(_ lineLimit: Int) -> ExpandableText {
@@ -94,6 +94,12 @@ extension ExpandableText {
         var result = self
         
         result.expandButtonColor = color
+        return result
+    }
+    public func expandAnimation(_ animation: Animation?) -> ExpandableText {
+        var result = self
+        
+        result.animation = animation
         return result
     }
 }

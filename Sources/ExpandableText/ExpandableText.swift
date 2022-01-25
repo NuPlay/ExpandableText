@@ -11,17 +11,17 @@ public struct ExpandableText: View {
     var text : String
     
     var font: Font = .body
-    var lineLimit : Int = 3
-    var foregroundColor : Color = .primary
-    
-    var expandButtonText : String = "more"
-    var expandButtonColor : Color = .blue
-    
+    var lineLimit: Int = 3
+    var foregroundColor: Color = .primary
+
+    var expandButtonText: String = "more"
+    var expandButtonColor: Color = .blue
     var uiFont: UIFont = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
+    var animation: Animation? = .none
+    
     @State private var expand : Bool = false
     @State private var truncated : Bool = false
-    @State private var size : CGFloat = 0
-    
+    @State private var fullSize: CGFloat = 0
     
     public init(text: String) {
         self.text = text
@@ -32,6 +32,7 @@ public struct ExpandableText: View {
                 .font(font)
                 .foregroundColor(foregroundColor)
                 .lineLimit(expand == true ? nil : lineLimit)
+                .animation(animation, value: expand)
                 .mask(
                     VStack(spacing: 0){
                         Rectangle()
@@ -71,24 +72,36 @@ public struct ExpandableText: View {
             }
         }
         .background(
-            Text(text)
-                .lineLimit(lineLimit)
-                .background(GeometryReader { geo in
-                    Color.clear.onAppear() {
-                        let size = CGSize(width: geo.size.width, height: .greatestFiniteMagnitude)
-                        
-                        let attributes:[NSAttributedString.Key:Any] = [NSAttributedString.Key.font: uiFont]
-                        let attributedText = NSAttributedString(string: text, attributes: attributes)
-                        
-                        let textSize = attributedText.boundingRect(with: size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
-                        
-                        if textSize.size.height > geo.size.height {
-                            truncated = true
-                            
-                            self.size = textSize.size.height
-                        }
+            ZStack{
+            if !truncated {
+                    if fullSize != 0 {
+                        Text(text)
+                            .lineLimit(lineLimit)
+                            .background(
+                                GeometryReader { geo in
+                                    Color.clear
+                                        .onAppear {
+                                            if fullSize > geo.size.height {
+                                                self.truncated = true
+                                                print(geo.size.height)
+                                                
+                                            }
+                                        }
+                                }
+                            )
                     }
-                })
+                    
+                    Text(text)
+                        .lineLimit(999)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .background(GeometryReader { geo in
+                            Color.clear
+                                .onAppear() {
+                                    self.fullSize = geo.size.height
+                                }
+                        })
+                }
+            }
                 .hidden()
         )
     }
