@@ -30,7 +30,7 @@ struct ExpandableText_Test: View {
             .font(.body)//optional
             .foregroundColor(.primary)//optional
             .lineLimit(3)//optional
-            .animation(.easeOut)//optional
+            .expandAnimation(.easeOut)//optional
             .padding(.horizontal, 24)//optional
     }
 }
@@ -45,5 +45,6 @@ Modifier | Default
 `.foregroundColor(_ color: Color)` | `.primary`
 `.expandButtonText(_ text: String)` | `"more"`
 `.expandButtonColor(_ color: Color)` | `.blue`
+`.expandAnimation(_ animation: Animation?)` | `.none`
 
 
