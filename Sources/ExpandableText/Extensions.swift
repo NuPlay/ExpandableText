@@ -10,64 +10,9 @@ import SwiftUI
 extension ExpandableText {
     public func font(_ font: Font) -> ExpandableText {
         var result = self
-        if #available(iOS 14.0, *) {
-            switch font {
-            case .largeTitle:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .largeTitle)
-            case .title:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .title1)
-            case .title2:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .title2)
-            case .title3:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .title3)
-            case .headline:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .headline)
-            case .subheadline:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .subheadline)
-            case .callout:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .callout)
-            case .caption:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .caption1)
-            case .caption2:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .caption2)
-            case .footnote:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .footnote)
-            case .body:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .body)
-            default:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .body)
-            }
-        } else {
-            switch font {
-            case .largeTitle:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .largeTitle)
-            case .title:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .title1)
-//            case .title2:
-//                result.uiFont = UIFont.preferredFont(forTextStyle: .title2)
-//            case .title3:
-//                result.uiFont = UIFont.preferredFont(forTextStyle: .title3)
-            case .headline:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .headline)
-            case .subheadline:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .subheadline)
-            case .callout:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .callout)
-            case .caption:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .caption1)
-//            case .caption2:
-//                result.uiFont = UIFont.preferredFont(forTextStyle: .caption2)
-            case .footnote:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .footnote)
-            case .body:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .body)
-            default:
-                result.uiFont = UIFont.preferredFont(forTextStyle: .body)
-            }
-        }
         
         result.font = font
-
+        
         return result
     }
     public func lineLimit(_ lineLimit: Int) -> ExpandableText {
@@ -84,18 +29,20 @@ extension ExpandableText {
         return result
     }
     
-    public func expandButtonText(_ text: String) -> ExpandableText {
+    public func expandButton(_ expandButton: TextSet) -> ExpandableText {
         var result = self
         
-        result.expandButtonText = text
+        result.expandButton = expandButton
         return result
     }
-    public func expandButtonColor(_ color: Color) -> ExpandableText {
+    
+    public func collapseButton(_ collapseButton: TextSet) -> ExpandableText {
         var result = self
         
-        result.expandButtonColor = color
+        result.collapseButton = collapseButton
         return result
     }
+    
     public func expandAnimation(_ animation: Animation?) -> ExpandableText {
         var result = self
         
@@ -115,5 +62,69 @@ extension String {
         let fontAttributes = [NSAttributedString.Key.font: font]
         let size = self.size(withAttributes: fontAttributes)
         return size.width
+    }
+}
+
+public struct TextSet {
+    var text: String
+    var font: Font
+    var color: Color
+}
+
+func fontToUIFont(font: Font) -> UIFont {
+    if #available(iOS 14.0, *) {
+        switch font {
+        case .largeTitle:
+            return UIFont.preferredFont(forTextStyle: .largeTitle)
+        case .title:
+            return UIFont.preferredFont(forTextStyle: .title1)
+        case .title2:
+            return UIFont.preferredFont(forTextStyle: .title2)
+        case .title3:
+            return UIFont.preferredFont(forTextStyle: .title3)
+        case .headline:
+            return UIFont.preferredFont(forTextStyle: .headline)
+        case .subheadline:
+            return UIFont.preferredFont(forTextStyle: .subheadline)
+        case .callout:
+            return UIFont.preferredFont(forTextStyle: .callout)
+        case .caption:
+            return UIFont.preferredFont(forTextStyle: .caption1)
+        case .caption2:
+            return UIFont.preferredFont(forTextStyle: .caption2)
+        case .footnote:
+            return UIFont.preferredFont(forTextStyle: .footnote)
+        case .body:
+            return UIFont.preferredFont(forTextStyle: .body)
+        default:
+            return UIFont.preferredFont(forTextStyle: .body)
+        }
+    } else {
+        switch font {
+        case .largeTitle:
+            return UIFont.preferredFont(forTextStyle: .largeTitle)
+        case .title:
+            return UIFont.preferredFont(forTextStyle: .title1)
+            //            case .title2:
+            //                return UIFont.preferredFont(forTextStyle: .title2)
+            //            case .title3:
+            //                return UIFont.preferredFont(forTextStyle: .title3)
+        case .headline:
+            return UIFont.preferredFont(forTextStyle: .headline)
+        case .subheadline:
+            return UIFont.preferredFont(forTextStyle: .subheadline)
+        case .callout:
+            return UIFont.preferredFont(forTextStyle: .callout)
+        case .caption:
+            return UIFont.preferredFont(forTextStyle: .caption1)
+            //            case .caption2:
+            //                return UIFont.preferredFont(forTextStyle: .caption2)
+        case .footnote:
+            return UIFont.preferredFont(forTextStyle: .footnote)
+        case .body:
+            return UIFont.preferredFont(forTextStyle: .body)
+        default:
+            return UIFont.preferredFont(forTextStyle: .body)
+        }
     }
 }
