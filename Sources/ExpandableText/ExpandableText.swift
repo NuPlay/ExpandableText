@@ -11,17 +11,17 @@ public struct ExpandableText: View {
     var text : String
     
     var font: Font = .body
-    var lineLimit : Int = 3
-    var foregroundColor : Color = .primary
+    var lineLimit: Int = 3
+    var foregroundColor: Color = .primary
     
-    var expandButtonText : String = "more"
-    var expandButtonColor : Color = .blue
+    var expandButton: TextSet = TextSet(text: "more", font: .body, color: .blue)
+    var collapseButton: TextSet? = nil
     
-    var uiFont: UIFont = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
+    var animation: Animation? = .none
+    
     @State private var expand : Bool = false
     @State private var truncated : Bool = false
-    @State private var size : CGFloat = 0
-    
+    @State private var fullSize: CGFloat = 0
     
     public init(text: String) {
         self.text = text
@@ -32,6 +32,7 @@ public struct ExpandableText: View {
                 .font(font)
                 .foregroundColor(foregroundColor)
                 .lineLimit(expand == true ? nil : lineLimit)
+                .animation(animation, value: expand)
                 .mask(
                     VStack(spacing: 0){
                         Rectangle()
@@ -40,55 +41,96 @@ public struct ExpandableText: View {
                         HStack(spacing: 0){
                             Rectangle()
                                 .foregroundColor(.black)
-                            if !expand && truncated{
-                                HStack(alignment: .bottom,spacing: 0){
-                                    LinearGradient(
-                                        gradient: Gradient(stops: [
-                                            Gradient.Stop(color: .black, location: 0),
-                                            Gradient.Stop(color: .clear, location: 0.8)]),
-                                        startPoint: .leading,
-                                        endPoint: .trailing)
-                                        .frame(width: 32, height: expandButtonText.heightOfString(usingFont: uiFont))
-                                    
-                                    Rectangle()
-                                        .foregroundColor(.clear)
-                                        .frame(width: expandButtonText.widthOfString(usingFont: uiFont), alignment: .center)
+                            if truncated{
+                                if !expand {
+                                    HStack(alignment: .bottom,spacing: 0){
+                                        LinearGradient(
+                                            gradient: Gradient(stops: [
+                                                Gradient.Stop(color: .black, location: 0),
+                                                Gradient.Stop(color: .clear, location: 0.8)]),
+                                            startPoint: .leading,
+                                            endPoint: .trailing)
+                                            .frame(width: 32, height: expandButton.text.heightOfString(usingFont: fontToUIFont(font: expandButton.font)))
+                                        
+                                        Rectangle()
+                                            .foregroundColor(.clear)
+                                            .frame(width: expandButton.text.widthOfString(usingFont: fontToUIFont(font: expandButton.font)), alignment: .center)
+                                    }
+                                }
+                                else if let collapseButton = collapseButton {
+                                    HStack(alignment: .bottom,spacing: 0){
+                                        LinearGradient(
+                                            gradient: Gradient(stops: [
+                                                Gradient.Stop(color: .black, location: 0),
+                                                Gradient.Stop(color: .clear, location: 0.8)]),
+                                            startPoint: .leading,
+                                            endPoint: .trailing)
+                                            .frame(width: 32, height: collapseButton.text.heightOfString(usingFont: fontToUIFont(font: collapseButton.font)))
+                                        
+                                        Rectangle()
+                                            .foregroundColor(.clear)
+                                            .frame(width: collapseButton.text.widthOfString(usingFont: fontToUIFont(font: collapseButton.font)), alignment: .center)
+                                    }
                                 }
                             }
                         }
-                        .frame(height: expandButtonText.heightOfString(usingFont: uiFont))
+                        .frame(height: expandButton.text.heightOfString(usingFont: fontToUIFont(font: font)))
                     }
                 )
             
-            if truncated && !expand {
-                Button(action: {
-                    self.expand = true
-                }, label: {
-                    Text(expandButtonText)
-                        .font(font)
-                        .foregroundColor(expandButtonColor)
-                })
+            if truncated {
+                if let collapseButton = collapseButton {
+                    Button(action: {
+                        self.expand.toggle()
+                    }, label: {
+                        Text(expand == false ? expandButton.text : collapseButton.text)
+                            .font(expand == false ? expandButton.font : collapseButton.font)
+                            .foregroundColor(expand == false ? expandButton.color : collapseButton.color)
+                    })
+                }
+                else if !expand {
+                    Button(action: {
+                        self.expand = true
+                    }, label: {
+                        Text(expandButton.text)
+                            .font(expandButton.font)
+                            .foregroundColor(expandButton.color)
+                    })
+                }
             }
         }
         .background(
-            Text(text)
-                .lineLimit(lineLimit)
-                .background(GeometryReader { geo in
-                    Color.clear.onAppear() {
-                        let size = CGSize(width: geo.size.width, height: .greatestFiniteMagnitude)
-                        
-                        let attributes:[NSAttributedString.Key:Any] = [NSAttributedString.Key.font: uiFont]
-                        let attributedText = NSAttributedString(string: text, attributes: attributes)
-                        
-                        let textSize = attributedText.boundingRect(with: size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
-                        
-                        if textSize.size.height > geo.size.height {
-                            truncated = true
-                            
-                            self.size = textSize.size.height
-                        }
+            ZStack{
+                if !truncated {
+                    if fullSize != 0 {
+                        Text(text)
+                            .font(font)
+                            .lineLimit(lineLimit)
+                            .background(
+                                GeometryReader { geo in
+                                    Color.clear
+                                        .onAppear {
+                                            if fullSize > geo.size.height {
+                                                self.truncated = true
+                                                print(geo.size.height)
+                                            }
+                                        }
+                                }
+                            )
                     }
-                })
+                    
+                    Text(text)
+                        .font(font)
+                        .lineLimit(999)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .background(GeometryReader { geo in
+                            Color.clear
+                                .onAppear() {
+                                    self.fullSize = geo.size.height
+                                }
+                        })
+                }
+            }
                 .hidden()
         )
     }

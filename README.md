@@ -30,7 +30,9 @@ struct ExpandableText_Test: View {
             .font(.body)//optional
             .foregroundColor(.primary)//optional
             .lineLimit(3)//optional
-            .animation(.easeOut)//optional
+            .expandButton(TextSet(text: "more", font: .body, color: .blue))
+            .collapseButton(TextSet(text: "less", font: .body, color: .blue))
+            .expandAnimation(.easeOut)//optional
             .padding(.horizontal, 24)//optional
     }
 }
@@ -43,7 +45,8 @@ Modifier | Default
 `.font(_ font: Font)` | `.body`
 `.lineLimit(_ lineLimit: Int)` | `3`
 `.foregroundColor(_ color: Color)` | `.primary`
-`.expandButtonText(_ text: String)` | `"more"`
-`.expandButtonColor(_ color: Color)` | `.blue`
+`.expandButton(_ expandButton: TextSet)` | `TextSet(text: "more", font: .body, color: .blue)`
+`.collapseButton(_ collapseButton: TextSet)` | `nil(If it's nil, it doesn't show)`
+`.expandAnimation(_ animation: Animation?)` | `.none`
 
 
