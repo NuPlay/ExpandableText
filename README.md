@@ -30,8 +30,8 @@ struct ExpandableText_Test: View {
             .font(.body)//optional
             .foregroundColor(.primary)//optional
             .lineLimit(3)//optional
-            .expandButton(TextSet(text: "more", font: .body, color: .blue))
-            .collapseButton(TextSet(text: "less", font: .body, color: .blue))
+            .expandButton(TextSet(text: "more", font: .body, color: .blue))//optional
+            .collapseButton(TextSet(text: "less", font: .body, color: .blue))//optional
             .expandAnimation(.easeOut)//optional
             .padding(.horizontal, 24)//optional
     }
