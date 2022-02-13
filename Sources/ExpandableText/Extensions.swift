@@ -69,6 +69,12 @@ public struct TextSet {
     var text: String
     var font: Font
     var color: Color
+
+    public init(text: String, font: Font, color: Color) {
+        self.text = text
+        self.font = font
+        self.color = color
+    }
 }
 
 func fontToUIFont(font: Font) -> UIFont {
