@@ -24,9 +24,11 @@ import SwiftUI
 import ExpandableText
 
 struct ExpandableText_Test: View {
+
+    @State private var sampleText: String = "Do you think you're living an ordinary life? You are so mistaken it's difficult to even explain. The mere fact that you exist makes you extraordinary. The odds of you existing are less than winning the lottery, but here you are. Are you going to let this extraordinary opportunity pass?"
     
     var body: some View {
-        ExpandableText(text: "Do you think you're living an ordinary life? You are so mistaken it's difficult to even explain. The mere fact that you exist makes you extraordinary. The odds of you existing are less than winning the lottery, but here you are. Are you going to let this extraordinary opportunity pass?")
+        ExpandableText(text: sampleText)
             .font(.body)//optional
             .foregroundColor(.primary)//optional
             .lineLimit(3)//optional
@@ -46,7 +48,7 @@ Modifier | Default
 `.lineLimit(_ lineLimit: Int)` | `3`
 `.foregroundColor(_ color: Color)` | `.primary`
 `.expandButton(_ expandButton: TextSet)` | `TextSet(text: "more", font: .body, color: .blue)`
-`.collapseButton(_ collapseButton: TextSet)` | `nil(If it's nil, it doesn't show)`
+`.collapseButton(_ collapseButton: TextSet?)` | `nil(If it's nil, it doesn't show)`
 `.expandAnimation(_ animation: Animation?)` | `.none`
 
 
