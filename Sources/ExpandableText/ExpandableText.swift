@@ -10,6 +10,11 @@ import SwiftUI
 public struct ExpandableText: View {
     var text : String
     
+    @available(iOS 15, *)
+    var markdownText: AttributedString {
+        (try? AttributedString(markdown: text)) ?? AttributedString()
+    }
+    
     var font: Font = .body
     var lineLimit: Int = 3
     var foregroundColor: Color = .primary
@@ -28,7 +33,13 @@ public struct ExpandableText: View {
     }
     public var body: some View {
         ZStack(alignment: .bottomTrailing){
-            Text(text)
+            Group {
+                if #available(iOS 15.0, *) {
+                    Text(markdownText)
+                } else {
+                    Text(text)
+                }
+            }
                 .font(font)
                 .foregroundColor(foregroundColor)
                 .lineLimit(expand == true ? nil : lineLimit)
