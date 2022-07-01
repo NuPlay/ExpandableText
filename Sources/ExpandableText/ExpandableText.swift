@@ -12,7 +12,7 @@ public struct ExpandableText: View {
     
     @available(iOS 15, *)
     var markdownText: AttributedString {
-        (try? AttributedString(markdown: text)) ?? AttributedString()
+        (try? AttributedString(markdown: text, options: AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace))) ?? AttributedString()
     }
     
     var font: Font = .body
